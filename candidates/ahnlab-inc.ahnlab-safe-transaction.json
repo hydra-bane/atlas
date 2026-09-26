@@ -38,9 +38,18 @@
       "country": "KR",
       "note": "pipeline test by maintainers",
       "tool": "hydra-bane 0.1.1"
+    },
+    {
+      "issue": 3,
+      "author": "Tiger-bricks",
+      "date": "2026-09-26",
+      "version": "1.18.1.1997",
+      "country": "KR",
+      "note": "pipeline test 2",
+      "tool": "hydra-bane 0.1.1"
     }
   ],
-  "report_count": 1,
+  "report_count": 2,
   "distinct_reporters": 1,
   "countries": [
     "KR"
