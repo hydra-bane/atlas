@@ -1,0 +1,67 @@
+name: intake
+# Turns `hydra-bane report` issues into candidate pull requests (one PR per program; repeat reports update it).
+# Issue text is untrusted: it is passed only through env, never interpolated into a script.
+on:
+  issues:
+    types: [opened, edited]
+concurrency:
+  group: intake
+  cancel-in-progress: false
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+jobs:
+  intake:
+    if: contains(github.event.issue.body, 'atlas-report') && github.event.issue.state == 'open'
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ github.token }}
+      ISSUE_BODY: ${{ github.event.issue.body }}
+      ISSUE_NUMBER: ${{ github.event.issue.number }}
+      ISSUE_AUTHOR: ${{ github.event.issue.user.login }}
+      ISSUE_CREATED: ${{ github.event.issue.created_at }}
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+      - id: check
+        run: node scripts/intake.mjs check
+      - if: steps.check.outputs.errors != ''
+        env:
+          ERRORS: ${{ steps.check.outputs.errors }}
+        run: |
+          printf 'Thanks for the report. The bot could not accept it:\n\n%s\n\nPlease re-run `hydra-bane report` with the latest version and post again.\n' "$ERRORS" > comment.md
+          gh issue comment "$ISSUE_NUMBER" --body-file comment.md
+          gh issue edit "$ISSUE_NUMBER" --add-label invalid
+      - if: steps.check.outputs.id != ''
+        env:
+          CID: ${{ steps.check.outputs.id }}
+          CNAME: ${{ steps.check.outputs.name }}
+        run: |
+          set -euo pipefail
+          git config user.name "hydra-bane-bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          branch="candidate/$CID"
+          if git ls-remote --exit-code --heads origin "$branch" >/dev/null; then
+            git fetch origin "$branch" && git checkout "$branch"
+          else
+            git checkout -b "$branch"
+          fi
+          node scripts/intake.mjs write > /dev/null
+          count=$(node -e 'console.log(require("./candidates/" + process.env.CID + ".json").report_count)')
+          git add "candidates/$CID.json"
+          git diff --cached --quiet || git commit -q -m "candidate $CID: report #$ISSUE_NUMBER ($count total)"
+          git push -q origin "$branch"
+          pr=$(gh pr list --head "$branch" --state open --json url --jq '.[0].url')
+          if [ -z "$pr" ]; then
+            printf 'Candidate built from user reports. Maintainers: add evidence and move it to `entries/` before merging.\n\nFirst report: #%s\n' "$ISSUE_NUMBER" > pr.md
+            pr=$(gh pr create --head "$branch" --base main --title "[candidate] $CNAME" --body-file pr.md --label candidate)
+          else
+            gh pr comment "$pr" --body "Another report: #$ISSUE_NUMBER ($count total)."
+          fi
+          gh issue comment "$ISSUE_NUMBER" --body "Thanks! Added to the candidate for this program: $pr ($count report(s) so far). Maintainers review candidates before anything reaches users."
+          gh issue close "$ISSUE_NUMBER" --reason completed

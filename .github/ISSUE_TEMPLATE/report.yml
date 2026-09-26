@@ -1,0 +1,18 @@
+name: Report an unwanted program
+description: Posted by `hydra-bane report`. Please do not edit the JSON by hand.
+title: "[report] "
+labels: [report]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        This report was prepared on your PC by `hydra-bane report`. It contains no user name, PC name or real paths.
+        A bot turns it into a candidate pull request; maintainers review candidates before anything reaches users.
+  - type: textarea
+    id: report
+    attributes:
+      label: Report
+      description: The JSON produced by hydra-bane.
+      render: json
+    validations:
+      required: true
