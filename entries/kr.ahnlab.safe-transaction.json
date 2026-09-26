@@ -1,0 +1,71 @@
+{
+  "schema": 2,
+  "id": "kr.ahnlab.safe-transaction",
+  "names": [
+    "AhnLab Safe Transaction",
+    "ASTx"
+  ],
+  "vendor": {
+    "name": "AhnLab",
+    "country": "KR"
+  },
+  "context": "Security program that Korean banking, payment and public-sector websites ask users to install to protect online transactions made in the browser.",
+  "tags": {
+    "countries": [
+      "KR"
+    ],
+    "kind": "banking-security"
+  },
+  "detect": {
+    "signers": [
+      {
+        "subject": "CN=\"AhnLab, Inc.\"*",
+        "thumbprints": [
+          "0F3E67708D7DB53143A69F2F9DA1C41120D02C21",
+          "1CA6F8F94156C0C6877EB57C539CB43066C9F977"
+        ]
+      }
+    ],
+    "uninstall_keys": [
+      {
+        "display_name": "^AhnLab Safe Transaction$",
+        "publisher": "AhnLab, Inc."
+      }
+    ],
+    "root_certs": [
+      "ASTxRoot2"
+    ]
+  },
+  "uninstall": {
+    "command_source": "signed-exe",
+    "msi_product_codes": [],
+    "exe_name": "V3Medic.exe"
+  },
+  "residue": "report-only",
+  "reversible": "reinstall-only",
+  "reinstall_note": "A bank, government or payment website may ask you to install it again the next time you use that service.",
+  "sources": [
+    {
+      "url": "https://www.ahnlab.com/ko/product/astx",
+      "kind": "vendor",
+      "date": "2026-09-26",
+      "title": "온라인 통합 보안 | AhnLab Safe Transaction (vendor product page; undated, accessed date)"
+    },
+    {
+      "url": "https://palant.info/2023/02/06/weakening-tls-protection-south-korean-style/",
+      "kind": "security-research",
+      "date": "2023-02-06",
+      "title": "Weakening TLS protection, South Korean style (Wladimir Palant; lists the root certificates each program installs)"
+    }
+  ],
+  "advisories": [],
+  "source": "original",
+  "vendor_response": [],
+  "dispute": {
+    "status": "none"
+  },
+  "verified": false,
+  "verified_by": null,
+  "added": "2026-09-26",
+  "last_reviewed": "2026-09-26"
+}

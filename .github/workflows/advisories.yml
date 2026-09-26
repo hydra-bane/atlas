@@ -1,0 +1,60 @@
+name: advisories
+# Weekly watch of NVD, EUVD, KISA RSS and CISA KEV for advisories that name an entry and are not in it yet.
+# It opens (or updates) one pull request, "advisories: new candidates", and never edits entries: a maintainer reads
+# each advisory and adds it with the version range it states. Fetched text is untrusted: the script only parses it
+# and escapes it into the PR body, which reaches gh through a file, never through the shell.
+on:
+  schedule:
+    - cron: '17 21 * * 0'   # Mondays 06:17 KST
+  workflow_dispatch:
+concurrency:
+  group: advisories
+  cancel-in-progress: false
+permissions:
+  contents: write
+  pull-requests: write
+jobs:
+  watch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      GH_TOKEN: ${{ github.token }}
+      NVD_API_KEY: ${{ secrets.NVD_API_KEY }}
+      BRANCH: bot/advisories
+      TITLE: 'advisories: new candidates'
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+      - id: scan
+        run: node scripts/advisories.mjs --out candidates/advisories.json --body "$RUNNER_TEMP/advisories-pr.md"
+      - if: steps.scan.outputs.count != '0'
+        run: |
+          set -euo pipefail
+          git config user.name "hydra-bane-bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          cp candidates/advisories.json "$RUNNER_TEMP/advisories.json"
+          git checkout -B "$BRANCH" "origin/${{ github.event.repository.default_branch }}"
+          cp "$RUNNER_TEMP/advisories.json" candidates/advisories.json
+          git add candidates/advisories.json
+          git diff --cached --quiet || git commit -q -m "advisories: new candidates"
+          git push -q --force origin "$BRANCH"
+          pr=$(gh pr list --head "$BRANCH" --state open --json url --jq '.[0].url')
+          if [ -z "$pr" ]; then
+            gh label create advisories --color FBCA04 --description 'Advisory candidates from the weekly watch' --force >/dev/null
+            gh pr create --head "$BRANCH" --base "${{ github.event.repository.default_branch }}" --title "$TITLE" --body-file "$RUNNER_TEMP/advisories-pr.md" --label advisories
+          else
+            gh pr edit "$pr" --body-file "$RUNNER_TEMP/advisories-pr.md"
+          fi
+      # Nothing new and no source failed: every earlier candidate is now in an entry, so close the PR.
+      - if: steps.scan.outputs.count == '0' && steps.scan.outputs.errors == '0'
+        run: |
+          pr=$(gh pr list --head "$BRANCH" --state open --json url --jq '.[0].url')
+          if [ -n "$pr" ]; then gh pr close "$pr" --delete-branch --comment "No open candidates this week."; fi
+      - if: steps.scan.outputs.errors != '0'
+        run: |
+          echo "::error::${{ steps.scan.outputs.errors }} advisory source(s) failed; see the scan step log"
+          exit 1

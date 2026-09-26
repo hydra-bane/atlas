@@ -1,0 +1,99 @@
+{
+  "schema": 2,
+  "id": "kr.wizvera.veraport",
+  "names": [
+    "Veraport",
+    "WIZVERA Veraport",
+    "Veraport G3",
+    "베라포트"
+  ],
+  "vendor": {
+    "name": "Wizvera",
+    "country": "KR"
+  },
+  "context": "Installation manager that Korean banking and government websites use to install the other security programs they ask for.",
+  "tags": {
+    "countries": [
+      "KR"
+    ],
+    "kind": "security-module-manager"
+  },
+  "detect": {
+    "signers": [
+      {
+        "subject": "CN=\"WIZVERA Co., Ltd.\"*",
+        "thumbprints": [
+          "DA34AF2AA72AD28B7581E7EF377EDD0E7E449B5D"
+        ]
+      }
+    ],
+    "uninstall_keys": [
+      {
+        "display_name": "^Veraport",
+        "publisher": "Wizvera"
+      }
+    ],
+    "root_certs": [
+      "Veraport-CA"
+    ]
+  },
+  "uninstall": {
+    "command_source": "msi-product-code",
+    "msi_product_codes": []
+  },
+  "residue": "report-only",
+  "reversible": "reinstall-only",
+  "reinstall_note": "A bank, government or payment website may ask you to install it again the next time you use that service.",
+  "sources": [
+    {
+      "url": "https://palant.info/2023/03/06/veraport-inside-koreas-dysfunctional-application-management/",
+      "kind": "security-research",
+      "date": "2023-03-06",
+      "title": "Veraport: Inside Korea's dysfunctional application management (Wladimir Palant)"
+    },
+    {
+      "url": "https://palant.info/2023/02/06/weakening-tls-protection-south-korean-style/",
+      "kind": "security-research",
+      "date": "2023-02-06",
+      "title": "Weakening TLS protection, South Korean style (Wladimir Palant)"
+    },
+    {
+      "url": "https://www.welivesecurity.com/2020/11/16/lazarus-supply-chain-attack-south-korea/",
+      "kind": "security-research",
+      "date": "2020-11-16",
+      "title": "Lazarus supply-chain attack in South Korea (ESET, Cherepanov and Kálnai)"
+    }
+  ],
+  "advisories": [
+    {
+      "publisher": "KISA",
+      "url": "https://www.boho.or.kr/kr/bbs/view.do?bbsId=B0000133&menuNo=205020&nttId=35794",
+      "date": "2020-11-18",
+      "title": "위즈베라 통합 보안 설치 프로그램 베라포트(veraport) 보안 업데이트 권고",
+      "affected": {
+        "up_to": "3.8.5.0",
+        "inclusive": true
+      }
+    },
+    {
+      "publisher": "KISA",
+      "url": "https://www.boho.or.kr/kr/bbs/view.do?bbsId=B0000133&menuNo=205020&nttId=67136",
+      "date": "2023-02-01",
+      "title": "금융 보안 솔루션 업데이트 권고",
+      "affected": {
+        "from": "3.7.0.2",
+        "up_to": "3.8.6.3",
+        "inclusive": true
+      }
+    }
+  ],
+  "source": "original",
+  "vendor_response": [],
+  "dispute": {
+    "status": "none"
+  },
+  "verified": false,
+  "verified_by": null,
+  "added": "2026-09-26",
+  "last_reviewed": "2026-09-26"
+}

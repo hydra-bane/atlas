@@ -57,13 +57,39 @@ export function merge(existing, r, meta) {
   return c;
 }
 
+export const MIN_ACCOUNT_AGE_DAYS = 7;
+export const MAX_REPORTS_PER_DAY = 5;
+export const LOGIN = /^[A-Za-z0-9](?:[A-Za-z0-9-]{0,38})$/;
+
+/**
+ * Spam limits. `recent` is the author's report issues (gh issue list --json number,createdAt); the window is the
+ * 24 hours up to this issue's creation, so re-running on an edit gives the same answer. Returns a reason or null.
+ */
+export function rateLimit({ login, accountCreated, issueCreated, recent }) {
+  if (typeof login !== 'string' || !LOGIN.test(login)) return 'the author name could not be checked';
+  const created = Date.parse(accountCreated), at = Date.parse(issueCreated);
+  if (!Number.isFinite(created) || !Number.isFinite(at)) return 'the author account could not be checked';
+  if (at - created < MIN_ACCOUNT_AGE_DAYS * 864e5) return `reports are accepted from GitHub accounts at least ${MIN_ACCOUNT_AGE_DAYS} days old`;
+  const inWindow = (Array.isArray(recent) ? recent : []).filter((i) => { const t = Date.parse(i?.createdAt); return t <= at && t > at - 864e5; });
+  if (inWindow.length > MAX_REPORTS_PER_DAY) return `at most ${MAX_REPORTS_PER_DAY} reports per account in 24 hours`;
+  return null;
+}
+
 function out(name, value) {
   if (process.env.GITHUB_OUTPUT) fs.appendFileSync(process.env.GITHUB_OUTPUT, `${name}<<__HB__\n${value}\n__HB__\n`);
   else console.log(`${name}=${value}`);
 }
 
-// CLI: `node scripts/intake.mjs check` validates and prints the id; `node scripts/intake.mjs write` updates candidates/<id>.json.
+// CLI: `node scripts/intake.mjs limits` applies the spam limits (env AUTHOR_CREATED, RECENT_JSON);
+// `check` validates and prints the id; `write` updates candidates/<id>.json.
 if (import.meta.url === `file://${process.argv[1]}` || import.meta.url === `file:///${process.argv[1]?.replace(/\\/g, '/')}`) {
+  if (process.argv[2] === 'limits') {
+    let recent = [];
+    try { recent = JSON.parse(process.env.RECENT_JSON ?? '[]'); } catch { /* treated as none */ }
+    const why = rateLimit({ login: process.env.ISSUE_AUTHOR, accountCreated: process.env.AUTHOR_CREATED, issueCreated: process.env.ISSUE_CREATED, recent });
+    if (why) out('limited', why);
+    process.exit(0);
+  }
   const x = extractReport(process.env.ISSUE_BODY);
   const errors = x.error ? [x.error] : validate(x.report);
   if (errors.length) { out('errors', errors.map((e) => `- ${e}`).join('\n')); process.exit(0); }

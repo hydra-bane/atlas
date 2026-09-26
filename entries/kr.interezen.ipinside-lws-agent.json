@@ -1,0 +1,81 @@
+{
+  "schema": 2,
+  "id": "kr.interezen.ipinside-lws-agent",
+  "names": [
+    "IPinside LWS Agent",
+    "IPinside"
+  ],
+  "vendor": {
+    "name": "Interezen",
+    "country": "KR"
+  },
+  "context": "Program that some Korean banking websites ask users to install; it sends information about the PC and its network connection to the website, which uses it to identify the device.",
+  "tags": {
+    "countries": [
+      "KR"
+    ],
+    "kind": "banking-security"
+  },
+  "detect": {
+    "signers": [
+      {
+        "subject": "CN=\"Interezen. Co.,Ltd\"*",
+        "thumbprints": [
+          "277F28C71D69E982EFC285A1354C85469715BEEF"
+        ]
+      }
+    ],
+    "uninstall_keys": [
+      {
+        "display_name": "^IPinside LWS Agent$",
+        "publisher": "interezen"
+      }
+    ],
+    "root_certs": [
+      "INTEREZEN CA"
+    ]
+  },
+  "uninstall": {
+    "command_source": "signed-exe",
+    "msi_product_codes": [],
+    "exe_name": "I3GSvcManager.exe"
+  },
+  "residue": "report-only",
+  "reversible": "reinstall-only",
+  "reinstall_note": "A bank, government or payment website may ask you to install it again the next time you use that service.",
+  "sources": [
+    {
+      "url": "https://palant.info/2023/01/25/ipinside-koreas-mandatory-spyware/",
+      "kind": "security-research",
+      "date": "2023-01-25",
+      "title": "IPinside: Korea's mandatory spyware (Wladimir Palant)"
+    },
+    {
+      "url": "https://palant.info/2023/02/06/weakening-tls-protection-south-korean-style/",
+      "kind": "security-research",
+      "date": "2023-02-06",
+      "title": "Weakening TLS protection, South Korean style (Wladimir Palant)"
+    }
+  ],
+  "advisories": [
+    {
+      "publisher": "KISA",
+      "url": "https://www.boho.or.kr/kr/bbs/view.do?bbsId=B0000133&menuNo=205020&nttId=67136",
+      "date": "2023-02-01",
+      "title": "금융 보안 솔루션 업데이트 권고",
+      "affected": {
+        "up_to": "3.0.0.18",
+        "inclusive": true
+      }
+    }
+  ],
+  "source": "original",
+  "vendor_response": [],
+  "dispute": {
+    "status": "none"
+  },
+  "verified": false,
+  "verified_by": null,
+  "added": "2026-09-26",
+  "last_reviewed": "2026-09-26"
+}

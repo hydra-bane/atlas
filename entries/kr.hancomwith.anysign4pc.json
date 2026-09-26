@@ -1,0 +1,158 @@
+{
+  "schema": 2,
+  "id": "kr.hancomwith.anysign4pc",
+  "names": [
+    "AnySign4PC",
+    "AnySign"
+  ],
+  "vendor": {
+    "name": "Hancom WITH",
+    "country": "KR"
+  },
+  "context": "Program for signing with Korean public-key certificates in the web browser, which some Korean government and financial websites ask users to install.",
+  "tags": {
+    "countries": [
+      "KR"
+    ],
+    "kind": "certificate-signing"
+  },
+  "detect": {
+    "signers": [
+      {
+        "subject": "CN=HANCOM WITH Inc.*",
+        "thumbprints": [
+          "C8AA888FE534D3BC310BE5506EA0EAACFC0F4155"
+        ]
+      }
+    ],
+    "uninstall_keys": [
+      {
+        "display_name": "^AnySign4PC",
+        "publisher": "HANCOM WITH Inc."
+      }
+    ],
+    "root_certs": [
+      "Hancom Secure Root Authority"
+    ]
+  },
+  "uninstall": {
+    "command_source": "signed-exe",
+    "msi_product_codes": [],
+    "exe_name": "uninst.exe"
+  },
+  "residue": "report-only",
+  "reversible": "reinstall-only",
+  "reinstall_note": "A bank, government or payment website may ask you to install it again the next time you use that service.",
+  "sources": [
+    {
+      "url": "https://www.hancomwith.com/secure/img/brochure_data05.pdf",
+      "kind": "vendor",
+      "date": "2026-09-26",
+      "title": "AnySign for PC: HANCOM SECURE solution introduction (vendor brochure; undated, accessed date)"
+    },
+    {
+      "url": "https://github.com/fake-root/fake-root.github.io/blob/main/src/usages.json",
+      "kind": "security-research",
+      "date": "2023-02-22",
+      "title": "FakeRoot: list of root certificates installed by Korean security programs, with the installing program"
+    }
+  ],
+  "advisories": [
+    {
+      "publisher": "KISA",
+      "url": "https://www.boho.or.kr/kr/bbs/view.do?bbsId=B0000133&menuNo=205020&nttId=35011",
+      "date": "2019-04-25",
+      "title": "한컴시큐어 AnySign4PC 웹플러그인 보안 업데이트 권고",
+      "affected": {
+        "from": "1.1.0.0",
+        "up_to": "1.1.1.6",
+        "inclusive": true
+      }
+    },
+    {
+      "publisher": "KISA",
+      "url": "https://www.boho.or.kr/kr/bbs/view.do?bbsId=B0000302&menuNo=205023&nttId=36343",
+      "date": "2021-11-15",
+      "title": "CVE-2020-7882 | anySign 디렉토리 탐색으로 인한 중요 파일 정보 유출 및 삭제 가능 취약점",
+      "cve": [
+        "CVE-2020-7882"
+      ],
+      "affected": {
+        "versions": [
+          "1.1.1.0",
+          "1.1.2.6",
+          "1.1.2.7"
+        ]
+      },
+      "kev": false
+    },
+    {
+      "publisher": "NVD",
+      "url": "https://nvd.nist.gov/vuln/detail/CVE-2020-7882",
+      "date": "2021-11-22",
+      "title": "NVD - CVE-2020-7882",
+      "cve": [
+        "CVE-2020-7882"
+      ],
+      "affected": {
+        "versions": [
+          "1.1.1.0",
+          "1.1.2.6",
+          "1.1.2.7"
+        ]
+      },
+      "kev": false
+    },
+    {
+      "publisher": "KISA",
+      "url": "https://www.boho.or.kr/kr/bbs/view.do?bbsId=B0000133&menuNo=205020&nttId=71693",
+      "date": "2025-03-24",
+      "title": "한컴위드, 라온시큐어, 이니라인 제품 보안 업데이트 권고",
+      "affected": {
+        "up_to": "1.1.4.3",
+        "inclusive": true
+      }
+    },
+    {
+      "publisher": "KISA",
+      "url": "https://www.boho.or.kr/kr/bbs/view.do?bbsId=B0000133&menuNo=205020&nttId=71796",
+      "date": "2025-07-07",
+      "title": "보안인증 소프트웨어 취약점 관련 보안 업데이트 권고 및 클리닝 서비스 시범 운영 안내",
+      "affected": {
+        "up_to": "1.1.4.3",
+        "inclusive": true
+      }
+    },
+    {
+      "publisher": "KISA",
+      "url": "https://www.boho.or.kr/kr/bbs/view.do?bbsId=B0000133&menuNo=205020&nttId=72074",
+      "date": "2026-06-01",
+      "title": "보안인증 소프트웨어 취약점 관련 클리닝 서비스 가동 안내",
+      "affected": {
+        "from": "1.1.4.4",
+        "up_to": "1.1.4.6",
+        "inclusive": true
+      }
+    },
+    {
+      "publisher": "KISA",
+      "url": "https://www.boho.or.kr/kr/bbs/view.do?bbsId=B0000133&menuNo=205020&nttId=72177",
+      "date": "2026-09-01",
+      "title": "한컴위드 제품 보안 업데이트 권고",
+      "affected": {
+        "from": "1.1.5.0",
+        "up_to": "1.1.5.1",
+        "inclusive": true
+      }
+    }
+  ],
+  "source": "original",
+  "vendor_response": [],
+  "dispute": {
+    "status": "none"
+  },
+  "verified": false,
+  "verified_by": null,
+  "added": "2026-09-26",
+  "last_reviewed": "2026-09-26"
+}

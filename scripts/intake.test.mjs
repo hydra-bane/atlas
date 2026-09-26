@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
-import { extractReport, merge, validate } from './intake.mjs';
+import { extractReport, merge, rateLimit, validate } from './intake.mjs';
 
 const good = {
   schema: 1, kind: 'atlas-report', suggested_id: 'ahnlab-inc.ahnlab-safe-transaction',
@@ -46,4 +46,21 @@ test('merges repeat reports into one candidate and counts distinct reporters', (
   assert.deepEqual(c.countries, ['KR']);
   assert.equal(c.reports.find((x) => x.issue === 5).note, 'edited');
   assert.equal(c.seen_sha256.length, 1);
+});
+
+test('spam limits: new accounts, more than 5 reports in 24h, and bad logins are held back', () => {
+  const at = '2026-09-26T12:00:00Z';
+  const old = '2020-01-01T00:00:00Z';
+  const hoursAgo = (h) => ({ createdAt: new Date(Date.parse(at) - h * 36e5).toISOString() });
+  assert.equal(rateLimit({ login: 'kim', accountCreated: old, issueCreated: at, recent: [hoursAgo(0)] }), null);
+  assert.match(rateLimit({ login: 'kim', accountCreated: '2026-09-20T12:00:01Z', issueCreated: at, recent: [] }), /7 days/);
+  assert.equal(rateLimit({ login: 'kim', accountCreated: '2026-09-19T12:00:00Z', issueCreated: at, recent: [] }), null);
+  const five = [0, 1, 2, 3, 23].map(hoursAgo);
+  assert.equal(rateLimit({ login: 'kim', accountCreated: old, issueCreated: at, recent: five }), null);
+  assert.match(rateLimit({ login: 'kim', accountCreated: old, issueCreated: at, recent: [...five, hoursAgo(5)] }), /5 reports/);
+  // Older reports and reports filed after this one (an edit re-run) do not count.
+  assert.equal(rateLimit({ login: 'kim', accountCreated: old, issueCreated: at, recent: [...five, hoursAgo(25), hoursAgo(-2)] }), null);
+  assert.ok(rateLimit({ login: 'kim; touch x', accountCreated: old, issueCreated: at, recent: [] }));
+  assert.ok(rateLimit({ login: '-kim', accountCreated: old, issueCreated: at, recent: [] }));
+  assert.ok(rateLimit({ login: 'kim', accountCreated: 'garbage', issueCreated: at, recent: [] }));
 });

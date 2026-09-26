@@ -1,0 +1,109 @@
+{
+  "schema": 2,
+  "id": "kr.raonsecure.touchen-nxkey",
+  "names": [
+    "TouchEn nxKey",
+    "TouchEn nxKey with E2E",
+    "터치엔 엔엑스키"
+  ],
+  "vendor": {
+    "name": "RaonSecure",
+    "country": "KR"
+  },
+  "context": "Keyboard protection program that many Korean banking and government websites ask users to install to protect what is typed into web forms.",
+  "tags": {
+    "countries": [
+      "KR"
+    ],
+    "kind": "banking-security"
+  },
+  "detect": {
+    "signers": [],
+    "uninstall_keys": [
+      {
+        "display_name": "^TouchEn nxKey with E2E"
+      }
+    ],
+    "root_certs": [
+      "iniLINE CrossEX RootCA2"
+    ]
+  },
+  "uninstall": {
+    "command_source": "msi-product-code",
+    "msi_product_codes": []
+  },
+  "residue": "report-only",
+  "reversible": "reinstall-only",
+  "reinstall_note": "A bank, government or payment website may ask you to install it again the next time you use that service.",
+  "sources": [
+    {
+      "url": "https://palant.info/2023/01/09/touchen-nxkey-the-keylogging-anti-keylogger-solution/",
+      "kind": "security-research",
+      "date": "2023-01-09",
+      "title": "TouchEn nxKey: The keylogging anti-keylogger solution (Wladimir Palant)"
+    },
+    {
+      "url": "https://palant.info/2023/02/06/weakening-tls-protection-south-korean-style/",
+      "kind": "security-research",
+      "date": "2023-02-06",
+      "title": "Weakening TLS protection, South Korean style (Wladimir Palant)"
+    },
+    {
+      "url": "https://kiup.ibk.co.kr/uib/jsp/guest/gud/CGUD204004_i_02.jsp",
+      "kind": "vendor",
+      "date": "2026-09-26",
+      "title": "IBK Industrial Bank keyboard-security uninstall guide (source of the DisplayName; undated, accessed date)"
+    }
+  ],
+  "advisories": [
+    {
+      "publisher": "KISA",
+      "url": "https://www.boho.or.kr/kr/bbs/view.do?bbsId=B0000133&menuNo=205020&nttId=67136",
+      "date": "2023-02-01",
+      "title": "금융 보안 솔루션 업데이트 권고",
+      "affected": {
+        "up_to": "1.0.0.78",
+        "inclusive": true
+      }
+    },
+    {
+      "publisher": "KISA",
+      "url": "https://www.boho.or.kr/kr/bbs/view.do?bbsId=B0000133&menuNo=205020&nttId=71519",
+      "date": "2024-08-09",
+      "title": "라온시큐어 제품 보안 조치 권고",
+      "affected": {
+        "up_to": "1.0.0.87",
+        "inclusive": true
+      }
+    },
+    {
+      "publisher": "KISA",
+      "url": "https://www.boho.or.kr/kr/bbs/view.do?bbsId=B0000133&menuNo=205020&nttId=71693",
+      "date": "2025-03-24",
+      "title": "한컴위드, 라온시큐어, 이니라인 제품 보안 업데이트 권고",
+      "affected": {
+        "up_to": "1.0.0.89",
+        "inclusive": true
+      }
+    },
+    {
+      "publisher": "KISA",
+      "url": "https://www.boho.or.kr/kr/bbs/view.do?bbsId=B0000133&menuNo=205020&nttId=71796",
+      "date": "2025-07-07",
+      "title": "보안인증 소프트웨어 취약점 관련 보안 업데이트 권고 및 클리닝 서비스 시범 운영 안내",
+      "affected": {
+        "up_to": "1.0.0.89",
+        "inclusive": true
+      }
+    }
+  ],
+  "source": "original",
+  "vendor_response": [],
+  "dispute": {
+    "status": "none"
+  },
+  "verified": false,
+  "verified_by": null,
+  "added": "2026-09-26",
+  "last_reviewed": "2026-09-26"
+}

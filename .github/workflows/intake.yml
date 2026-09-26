@@ -28,7 +28,29 @@ jobs:
       - uses: actions/setup-node@v7
         with:
           node-version: 22
+      # Spam limits: accounts younger than 7 days, and more than 5 reports per author in 24 hours.
+      - id: limits
+        run: |
+          set -euo pipefail
+          if ! printf '%s' "$ISSUE_AUTHOR" | grep -Eq '^[A-Za-z0-9][A-Za-z0-9-]{0,38}$'; then
+            node scripts/intake.mjs limits
+            exit 0
+          fi
+          AUTHOR_CREATED=$(gh api "users/$ISSUE_AUTHOR" --jq .created_at)
+          RECENT_JSON=$(gh issue list -R "$GITHUB_REPOSITORY" --author "$ISSUE_AUTHOR" --state all --search 'atlas-report in:body' --limit 100 --json number,createdAt)
+          export AUTHOR_CREATED RECENT_JSON
+          node scripts/intake.mjs limits
+      - if: steps.limits.outputs.limited != ''
+        env:
+          WHY: ${{ steps.limits.outputs.limited }}
+        run: |
+          printf 'Thanks for taking the time to report this. To keep the Atlas free of spam, this report was not processed: %s.\n\nNothing is wrong with the report itself. Please post it again later.\n' "$WHY" > comment.md
+          gh label create rate-limited --color BFD4F2 --description 'Report paused by the spam limits' --force >/dev/null
+          gh issue comment "$ISSUE_NUMBER" --body-file comment.md
+          gh issue edit "$ISSUE_NUMBER" --add-label rate-limited
+          gh issue close "$ISSUE_NUMBER" --reason "not planned"
       - id: check
+        if: steps.limits.outputs.limited == ''
         run: node scripts/intake.mjs check
       - if: steps.check.outputs.errors != ''
         env:

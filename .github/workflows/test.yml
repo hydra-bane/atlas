@@ -10,4 +10,5 @@ jobs:
       - uses: actions/setup-node@v7
         with:
           node-version: 22
-      - run: node --test scripts/intake.test.mjs
+      - run: node --test scripts/*.test.mjs
+      - run: node scripts/entry-validate.mjs

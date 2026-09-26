@@ -1,0 +1,70 @@
+{
+  "schema": 2,
+  "id": "kr.inca.nprotect-online-security",
+  "names": [
+    "nProtect Online Security",
+    "nProtect Online Security V1.0(PFS)"
+  ],
+  "vendor": {
+    "name": "INCA Internet",
+    "country": "KR"
+  },
+  "context": "Security program from INCA Internet that Korean banking and payment websites ask users to install to protect online transactions.",
+  "tags": {
+    "countries": [
+      "KR"
+    ],
+    "kind": "banking-security"
+  },
+  "detect": {
+    "signers": [
+      {
+        "subject": "CN=\"INCA Internet Co.,Ltd.\"*",
+        "thumbprints": [
+          "BC30F92B6379621B59659FC2D4E4051FACEB3426"
+        ]
+      }
+    ],
+    "uninstall_keys": [
+      {
+        "display_name": "^nProtect Online Security",
+        "publisher": "INCA Internet Co., Ltd."
+      }
+    ],
+    "root_certs": [
+      "INCA Internet Co., Ltd. CA"
+    ]
+  },
+  "uninstall": {
+    "command_source": "signed-exe",
+    "msi_product_codes": [],
+    "exe_name": "nProtectUninstaller.exe"
+  },
+  "residue": "report-only",
+  "reversible": "reinstall-only",
+  "reinstall_note": "A bank, government or payment website may ask you to install it again the next time you use that service.",
+  "sources": [
+    {
+      "url": "https://www.inca.co.kr/products/nprotect/online-security",
+      "kind": "vendor",
+      "date": "2026-09-26",
+      "title": "nProtect Online Security | INCA Internet (vendor product page; undated, accessed date)"
+    },
+    {
+      "url": "https://github.com/fake-root/fake-root.github.io/blob/main/src/usages.json",
+      "kind": "security-research",
+      "date": "2023-02-22",
+      "title": "FakeRoot: list of root certificates installed by Korean security programs, with the installing program"
+    }
+  ],
+  "advisories": [],
+  "source": "original",
+  "vendor_response": [],
+  "dispute": {
+    "status": "none"
+  },
+  "verified": false,
+  "verified_by": null,
+  "added": "2026-09-26",
+  "last_reviewed": "2026-09-26"
+}

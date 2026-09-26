@@ -1,0 +1,83 @@
+{
+  "schema": 2,
+  "id": "us.superfish.visualdiscovery",
+  "names": [
+    "Superfish VisualDiscovery",
+    "Superfish Inc. Visual Discovery"
+  ],
+  "vendor": {
+    "name": "Superfish, Inc.",
+    "country": "US"
+  },
+  "context": "Advertising program that Lenovo preinstalled on some consumer laptops sold from August 2014; it showed shopping ads on web pages, including encrypted ones.",
+  "tags": {
+    "countries": [
+      "US"
+    ],
+    "kind": "oem-preinstall"
+  },
+  "detect": {
+    "signers": [],
+    "uninstall_keys": [
+      {
+        "display_name": "^(Superfish Inc\\.? )?Visual ?Discovery"
+      }
+    ],
+    "root_certs": [
+      "Superfish, Inc."
+    ]
+  },
+  "uninstall": {
+    "command_source": "msi-product-code",
+    "msi_product_codes": []
+  },
+  "residue": "report-only",
+  "reversible": "reinstall-only",
+  "sources": [
+    {
+      "url": "https://www.ftc.gov/news-events/news/press-releases/2017/09/lenovo-settles-ftc-charges-it-harmed-consumers-preinstalled-software-its-laptops-compromised-online",
+      "kind": "regulator",
+      "date": "2017-09-05",
+      "title": "Lenovo Settles FTC Charges it Harmed Consumers With Preinstalled Software on its Laptops that Compromised Online Security"
+    },
+    {
+      "url": "https://web.archive.org/web/20151227013501/https://support.lenovo.com/de/de/product_security/superfish_uninstall",
+      "kind": "vendor",
+      "date": "2015-12-27",
+      "title": "Lenovo: SuperFish Uninstall Instructions (archived copy; source of the DisplayName)"
+    }
+  ],
+  "advisories": [
+    {
+      "publisher": "CISA",
+      "url": "https://www.cisa.gov/news-events/alerts/2015/02/20/lenovo-superfish-adware-vulnerable-https-spoofing",
+      "date": "2015-02-20",
+      "title": "Lenovo Superfish Adware Vulnerable to HTTPS Spoofing"
+    },
+    {
+      "publisher": "KISA",
+      "url": "https://www.boho.or.kr/kr/bbs/view.do?bbsId=B0000133&menuNo=205020&nttId=22523",
+      "date": "2015-02-23",
+      "title": "Lenovo Superfish 애드웨어 삭제 권고"
+    },
+    {
+      "publisher": "NVD",
+      "url": "https://nvd.nist.gov/vuln/detail/CVE-2015-2077",
+      "date": "2015-02-24",
+      "title": "NVD - CVE-2015-2077",
+      "cve": [
+        "CVE-2015-2077"
+      ],
+      "kev": false
+    }
+  ],
+  "source": "original",
+  "vendor_response": [],
+  "dispute": {
+    "status": "none"
+  },
+  "verified": false,
+  "verified_by": null,
+  "added": "2026-09-26",
+  "last_reviewed": "2026-09-26"
+}
